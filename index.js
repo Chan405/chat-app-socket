@@ -18,10 +18,15 @@ io.on("connection", (socket) => {
 
   // sendMessage
   socket.on("sendMessage", (response) => {
-    // console.log("send message => ", response);
+    console.log("send message => ", response);
     const user = onlineUsers.find((user) => user.userId === response.partnerId);
     if (user) {
       io.to(user.socketId).emit("getMessage", response);
+      io.to(user.socketId).emit("getNotification", {
+        sendId: response.data.sendId,
+        isRead: false,
+        date: new Date(),
+      });
     }
   });
 
